@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%=title%></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="/SemanticUI/semantic.min.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="/SemanticUI/semantic.min.js"></script>
+  </head>
+</body>
+  <body>
+    <div class="ui primary pointing menu" id="header">
+      <a href="/" class="item active">Home</a>
+    </div>
+    <div class="ui middle aligned centered grid">
+      <div class="sixteen wide column">
+        <div class="ui segment" style='background-color:inherit;'>
+          <% if (typeof error === 'undefined'){ %>
+          <div class="ui middle aligned centered grid" style="background-color: black">
+            <div class="two wide column middle aligned">
+              <i class="inverted black circular arrow left link icon large"></i>
+            </div>
+            <div class='twelve wide column middle aligned' id='photoContainer'>
+              <img src='https://vignette2.wikia.nocookie.net/mafiagame/images/2/23/Unknown_Person.png/revision/latest?cb=20151119092211'>
+              <div class="ui inverted dimmer">
+                <div class="content">
+                  <div class="center">
+                    <button class="ui positive basic button" id="submitPhoto">Upload photo</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="two wide column middle aligned">
+              <i class="inverted black circular arrow right link icon large"></i>
+            </div>
+          </div>
+          <% } %>
+          <div class='ui one column grid' style='background-color:inherit;'>
+            <div class="column">
+              <div class="ui segment">
+                <% if (typeof success !== 'undefined' || typeof error !== 'undefined') { %>
+                  <% if (typeof success !== 'undefined') { %>
+                    <div class="ui transition message positive visible main">
+                  <% } else { %>
+                    <div class="ui transition message negative visible main">
+                      <% } %>
+                       <i class="close icon"></i>
+                      <div class="header">
+                        Server Information
+                      </div>
+                      <ul class="list">
+                        <% if (typeof success !== 'undefined') { %> <%=success%> <% } %>
+                        <% if (typeof error !== 'undefined') { %> <%=error%> <% } %>
+                      </ul>
+                    </div>
+                  <% } else { %>
+                    <div class="ui transition message main" style='display:none;'>
+                       <i class="close icon"></i>
+                      <div class="header"></div>
+                      <ul class="list"></ul>
+                    </div>
+                    <% } %>
+                <% if (typeof error === 'undefined'){ %>
+                <div class="content">
+                  <h3><i class="large circle blue info icon"></i>Your profile</h3>
+                  <div class="ui divider"></div>
+                    <form class="ui form user">
+                      <div class='ui two column grid stackable'>
+                        <div class="column">
+                          <div class="field">
+                            <div class="two fields">
+                              <div class="field">
+                                <label>First Name</label>
+                                <input type="text" name="first-name" placeholder="First Name" value='<%=firstname%>'>
+                              </div>
+                              <div class="field">
+                                <label>Last Name</label>
+                                <input type="text" name="last-name" placeholder="Last Name" value='<%=lastname%>'>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="field">
+                            <label>Email</label>
+                            <input type="text" name="email" placeholder="Email" value='<%=mail%>'>
+                          </div>
+                          <div class="field">
+                            <label>Birthday (<span style='font-style: italic;'><%=yearsOld%> Years old</span>)</label>
+                            <input type="text" name="date" placeholder="YYYY-MM-DD" value='<%=birthdate%>'>
+                          </div>
+                          <div class="field">
+                            <label>Gender</label>
+                            <div class="ui selection dropdown">
+                              <input type="hidden" name="gender" value='<%=gender%>'>
+                              <i class="dropdown icon"></i>
+                              <div class="default text"></div>
+                              <div class="menu">
+                                <div class="item" data-value="1"><i class="man blue icon"></i> Man</div>
+                                <div class="item" data-value="2"><i class="woman pink icon"></i> Girl</div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="field">
+                            <label>Sexual Orientation</label>
+                            <div class="ui selection dropdown">
+                              <input type="hidden" name="sexualOrientation" value='<%=sexualOrientation%>'>
+                              <i class="dropdown icon"></i>
+                              <div class="default text"></div>
+                              <div class="menu">
+                                <div class="item" data-value="1"><i class="heterosexual blue icon"></i> HeteroSexual</div>
+                                <div class="item" data-value="2"><i class="intergender pink icon"></i> BiSexual</div>
+                                <div class="item" data-value="3"><i class="gay pink icon"></i> HomoSexual</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="column">
+                          <div class="field">
+                            <label>Biography</label>
+                            <textarea name="bio"><%=bio%></textarea>
+                          </div>
+                          <div class="field">
+                            <label>Interests</label>
+                            <div class="ui multiple selection dropdown">
+                              <input type="hidden" name="tags" value='<%=ownTags%>'>
+                              <i class="dropdown icon"></i>
+                              <div class="default text"></div>
+                              <div class="menu">
+                                <% tags.forEach(function(elem) { %>
+                                    <div class="item" data-value="<%=elem.id%>"><i class="hashtag blue icon"></i><%=elem.name%></div>
+                                <% }); %>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="field">
+                          <button class="ui positive basic button" id="submit">Save changes</button>
+                        </div>
+                        <div class="ui inverted dimmer">
+                          <div class="ui loader"></div>
+                        </div>
+                      </div>
+                    </form>
+                </div>
+                <div class="ui modal">
+                  <div class="header">Upload a picture</div>
+                  <div class="content">
+                    <div class="ui info message">
+                      <div class="header"><i class='circle blue info icon'></i>Information</div>
+                      <ul class="list">
+                        <li>You can only upload jpeg pictures</li>
+                        <li>You can only have up to 5 pictures per account</li>
+                      </ul>
+                    </div>
+                    <div class="ui transition message" id="uploadMsgBox" style='display:none;'>
+                       <i class="close icon"></i>
+                      <div class="header"></div>
+                      <ul class="list"></ul>
+                    </div>
+                    <form class="ui form">
+                      <div class="field">
+                        <label>File</label>
+                        <input type="file" name="pic" accept="image/png|image/jpeg" id='fileInput'>
+                      </div>
+                    </form>
+                  </div>
+                  <img class="ui centered medium rounded image transition upload" id='preview' style="display: none;" src=''>
+                  <div class="actions">
+                    <div class="ui red basic right labeled icon deny button">Cancel<i class="close icon"></i></div>
+                    <div class="ui positive basic right labeled icon button" id='uploadButton'>Upload<i class="checkmark icon"></i></div>
+                  </div>
+                </div>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript" src="/js/ajax.js"></script>
+    <script type="text/javascript" src="/js/checkform.js"></script>
+    <script type="text/javascript" src="/js/home.js"></script>
+  </body>
+</html>

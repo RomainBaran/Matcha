@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%=title%></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="/SemanticUI/semantic.min.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="/SemanticUI/semantic.min.js"></script>
+  </head>
+</body>
+  <body>
+    <div class="ui primary pointing menu" id="header">
+      <a href="/" class="item">Home</a>
+        <div class="right menu">
+          <a href="/signin" class="ui item active">Sign In</a>
+          <a href="/signup" class="ui item">Sign Up</a>
+        </div>
+    </div>
+    <div class="ui stackable two column grid centered">
+      <div class="column">
+        <div class="ui segment">
+          <% if (typeof success !== 'undefined' || typeof error !== 'undefined') { %>
+              <% if (typeof success !== 'undefined') { %>
+                <div class="ui transition message positive visible">
+              <% } else { %>
+                <div class="ui transition message negative visible">
+              <% } %>
+               <i class="close icon"></i>
+              <div class="header">
+                Server Information
+              </div>
+              <ul class="list">
+                <% if (typeof success !== 'undefined') { %> <%=success%> <% } %>
+                <% if (typeof error !== 'undefined') { %> <%=error%> <% } %>
+              </ul>
+            </div>
+          <% } else { %>
+            <div class="ui transition message" style='display:none;'>
+            <i class="close icon"></i>
+            <div class="header">
+            </div>
+            <ul class="list">
+            </ul>
+          </div>
+          <% } %>
+          <form class="ui form">
+            <div class="field">
+              <label>Email</label>
+              <input type="text" name="email" placeholder="Email">
+            </div>
+            <div class="field">
+              <label>Password</label>
+              <input type="password" name="password" placeholder="Password">
+            </div>
+            <div class="field">
+              <button class="ui fluid primary button" id="submit">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript" src="/js/ajax.js"></script>
+    <script type="text/javascript" src="/js/checkform.js"></script>
+    <script type="text/javascript" src="/js/signin.js"></script>
+  </body>
+</html>
