@@ -100,7 +100,7 @@ router.post('/register',
           nodemailer.sendMail({
             from: '"Matcha" <noreply@matcha.com>',
             to: req.body[0]['email'],
-            subject: 'Matcha subscribed',
+            subject: 'Matcha subscription',
             html: `<p>Welcome to matcha app ! Please follow this <a href='http://localhost:3000/verify/`+ rand +`'>link</a></p>`
           }, (error, info) => {
               if (error) {
@@ -157,7 +157,7 @@ router.post('/updateInfo',
 
         req.body[0]['tags'].split(',').forEach((elem, index, currArray) => {
           sql += ' (?,?)';
-          sql += (index < (currArray.length - 1)) ? ',' : ';'
+          sql += (index < (currArray.length - 1)) ? ',' : ';';
           params.push(req.session.id_user, parseInt(elem));
         });
 
@@ -175,11 +175,25 @@ router.post('/updateInfo',
     check.checkConnection.bind([true, false]),
     check.checkParams.bind([
       ['picture', (elem) => {
+          if (typeof elem !== 'string' || elem.search('data:image/jpeg;base64,') === -1)
+            return false;
 
+          const data = elem.split(',')[1];
+
+          if (!data || data === '')
+            return false;
+
+          try{
+              atob(data);
+          } catch (DOMException e) {
+              console.log(e)
+          }
+          return true;
       }, "Wrong picture format sent"]
     ]),
     (req, res) => {
 
+        return res.json({success: ['Picture sucessfully uploaded']});
   });
 
 module.exports = router;

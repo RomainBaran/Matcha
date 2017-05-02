@@ -15,7 +15,7 @@ app.set('view engine', 'ejs');
 app.set('views', './views');
 
 //parse only json post data
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '5mb'}));
 
 //set session
 app.use(session({
@@ -31,7 +31,9 @@ app.use(user);
 //Set error
 app.use(function(err, req, res, next) {
   console.error(err.stack);
-  res.status(500).send('Something broke!');
+  req.method === 'POST' ?
+    res.json({error: [err.message]}) :
+    res.status(500).send(err.message);
 });
 
 app.listen(3000, function (){

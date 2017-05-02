@@ -38,9 +38,14 @@
   }
 
   var arrayBufferToBase64 = (typedArray) => {
-    var dataView = new Uint8Array(typedArray);
+    var dataView = new Uint8Array(typedArray),
+        str      = '';
 
-    return `data:image/jpeg;base64,` + btoa(String.fromCharCode.apply(null, dataView));
+    dataView.forEach((elem) => {
+        str += String.fromCharCode(elem);
+    });
+
+    return `data:image/jpeg;base64,` + btoa(str);
   }
 
   var checkImgIntegrity = (typedArray) => {
