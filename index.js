@@ -6,6 +6,7 @@ var app = express();
 /*Get routes*/
 var index = require('./routes/index');
 var user = require('./routes/user');
+var photo = require('./routes/photo');
 
 /*Public access to files in /public*/
 app.use(express.static('public'));
@@ -27,6 +28,7 @@ app.use(session({
 //use routes
 app.use(index);
 app.use(user);
+app.use(photo);
 
 //Set error
 app.use(function(err, req, res, next) {

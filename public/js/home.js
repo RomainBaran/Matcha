@@ -11,9 +11,11 @@
       uploadInput       = $('#fileInput'),
       preview           = $('#preview'),
       photoListBox      = $('#photoList'),
-      photoDisplayed    = $('#photoDisplayed');
+      photoDisplayed    = $('#photoDisplayed'),
+      deletePhoto       = $('#deletePhoto'),
+      profilePhoto      = $('#profilePhoto');
 
-  var unDisplayPreview = () => {
+  const unDisplayPreview = () => {
     preview[0].src = '';
     preview.transition({
       animation   : 'scale',
@@ -21,7 +23,7 @@
     });
   }
 
-  var displayMsg = (headerText, type, lines, messageBox = [message, header, list]) => {
+  const displayMsg = (headerText, type, lines, messageBox = [message, header, list]) => {
     messageBox[0].removeClass("negative positive success").addClass(type);
     messageBox[1].text(headerText);
     messageBox[2].empty();
@@ -39,7 +41,7 @@
     });
   }
 
-  var arrayBufferToBase64 = (typedArray) => {
+  const arrayBufferToBase64 = (typedArray) => {
     var dataView = new Uint8Array(typedArray),
         str      = '';
 
@@ -50,7 +52,7 @@
     return `data:image/jpeg;base64,` + btoa(str);
   }
 
-  var checkImgIntegrity = (typedArray) => {
+  const checkImgIntegrity = (typedArray) => {
     if (typeof typedArray !== 'object')
       return false;
 
@@ -62,7 +64,7 @@
     return true;
   }
 
-  var uploadPicture = (upload = false) => {
+  const uploadPicture = (upload = false) => {
     var reader = new FileReader();
 
     $('#uploadButton').addClass('loading');
@@ -95,7 +97,13 @@
           uploadMsgBox.transition({animation: 'fade', duration: 1500});
           displayMsg("Information", 'positive', res.success, [uploadMsgBox, uploadMsgHeader, uploadMsgLst]);
           photoListBox.children().removeClass('active');
-          photoListBox.append(`<img class='ui active image' style='background-color: white;' src='${preview[0].src}'>`);
+          var photo = $(`<img class='ui active image' style='background-color: white;' src='${preview[0].src}' data-id='${res.insertId}'>`);
+          photoListBox.append(photo);
+          $(photo[0]).on('click', (ev) => {
+            $('#photoList img').removeClass('active');
+            photoDisplayed[0].src = $(ev.target)[0].src;
+            $(ev.target).addClass('active');
+          });
           photoDisplayed[0].src = preview[0].src;
         }, (res) => {
           $('#uploadButton').removeClass('loading');
@@ -187,7 +195,7 @@
     request('/getPicture', 'POST', $({name: 'id_user', value: undefined}), (res) => {
       for (var i = 0; i < res.data.length; i++){
         var photo = $(`<img class='ui image' style='background-color: white;' src='${res.data[i].data}' data-id='${res.data[i].id}'>`);
-        photoListBox.append(photo)
+        photoListBox.append(photo);
         $(photo[0]).on('click', (ev) => {
           $('#photoList img').removeClass('active');
           photoDisplayed[0].src = $(ev.target)[0].src;
@@ -202,6 +210,59 @@
       $('html, body').animate({scrollTop: message.offset().top}, 'slow');
       message.transition({animation: 'fade', duration: 1500});
       displayMsg("Can't load pictures", 'negative', res.error);
+    });
+
+    deletePhoto.on('click', (ev) => {
+        var active = $('#photoList .active');
+
+        if (message.hasClass('visible') || message.hasClass('in'))
+          message.transition('clear queue').transition({animation: 'fade', duration: 0});
+
+        if (typeof active !== 'object' || active.length !== 1 || !active[0].dataset || !active[0].dataset['id'] || isNaN(parseInt(active[0].dataset['id']))){
+            $('html, body').animate({scrollTop: message.offset().top}, 'slow');
+            message.transition({animation: 'fade', duration: 1500});
+            displayMsg('Error', 'negative', ['Please select one picture']);
+            return ;
+        }
+        request('/deletePicture', 'POST', $({name: 'id_photo', value: active[0].dataset['id']}), (res) => {
+            active.remove();
+            if ($('#photoList img').length > 0){
+                photoDisplayed[0].src = $('#photoList img')[0].src;
+                $('#photoList img').first().addClass('active');
+            } else {
+                photoDisplayed[0].src = 'https://vignette2.wikia.nocookie.net/mafiagame/images/2/23/Unknown_Person.png/revision/latest?cb=20151119092211';
+            }
+            $('html, body').animate({scrollTop: message.offset().top}, 'slow');
+            message.transition({animation: 'fade', duration: 1500});
+            displayMsg('Information', 'positive', ['Picture deleted']);
+        }, (res) => {
+            $('html, body').animate({scrollTop: message.offset().top}, 'slow');
+            message.transition({animation: 'fade', duration: 1500});
+            displayMsg('Server error', 'negative', res.error);
+        });
+    });
+
+    profilePhoto.on('click', (ev) => {
+        var active = $('#photoList .active');
+
+        if (message.hasClass('visible') || message.hasClass('in'))
+          message.transition('clear queue').transition({animation: 'fade', duration: 0});
+
+        if (typeof active !== 'object' || active.length !== 1 || !active[0].dataset || !active[0].dataset['id'] || isNaN(parseInt(active[0].dataset['id']))){
+            $('html, body').animate({scrollTop: message.offset().top}, 'slow');
+            message.transition({animation: 'fade', duration: 1500});
+            displayMsg('Error', 'negative', ['Please select one picture']);
+            return ;
+        }
+        request('/setProfilePicture', 'POST', $({name: 'id_photo', value: active[0].dataset['id']}), (res) => {
+            $('html, body').animate({scrollTop: message.offset().top}, 'slow');
+            message.transition({animation: 'fade', duration: 1500});
+            displayMsg('Information', 'positive', res.success);
+        }, (res) => {
+            $('html, body').animate({scrollTop: message.offset().top}, 'slow');
+            message.transition({animation: 'fade', duration: 1500});
+            displayMsg('Server error', 'negative', res.error);
+        });
     });
   });
 })();
