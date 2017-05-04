@@ -24,3 +24,12 @@ body, .bg {
 #slider:hover {
   opacity: 0.3;
 }
+
+#photoList .active{
+  border: 4px solid #22be34;
+}
+
+#photoList img:not(.active){
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
+}

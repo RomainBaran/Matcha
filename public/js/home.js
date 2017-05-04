@@ -9,7 +9,9 @@
       uploadMsgHeader   = $("#uploadMsgBox .header"),
       uploadMsgLst      = $("#uploadMsgBox .list"),
       uploadInput       = $('#fileInput'),
-      preview           = $('#preview');
+      preview           = $('#preview'),
+      photoListBox      = $('#photoList'),
+      photoDisplayed    = $('#photoDisplayed');
 
   var unDisplayPreview = () => {
     preview[0].src = '';
@@ -88,10 +90,13 @@
 
       preview[0].src = arrayBufferToBase64(reader.result);
       if (upload === true){
-        request('/uploadPicture', 'POST', $({name: 'picture', value: preview[0].src}), (res) => {
+        request('/uploadPicture', 'POST', $({name: 'pic', value: preview[0].src}), (res) => {
           $('#uploadButton').removeClass('loading');
           uploadMsgBox.transition({animation: 'fade', duration: 1500});
           displayMsg("Information", 'positive', res.success, [uploadMsgBox, uploadMsgHeader, uploadMsgLst]);
+          photoListBox.children().removeClass('active');
+          photoListBox.append(`<img class='ui active image' style='background-color: white;' src='${preview[0].src}'>`);
+          photoDisplayed[0].src = preview[0].src;
         }, (res) => {
           $('#uploadButton').removeClass('loading');
           uploadMsgBox.transition({animation: 'fade', duration: 1500});
@@ -177,6 +182,26 @@
           displayMsg("Error from server", 'negative', res.error);
         });
       }
+    });
+
+    request('/getPicture', 'POST', $({name: 'id_user', value: undefined}), (res) => {
+      for (var i = 0; i < res.data.length; i++){
+        var photo = $(`<img class='ui image' style='background-color: white;' src='${res.data[i].data}' data-id='${res.data[i].id}'>`);
+        photoListBox.append(photo)
+        $(photo[0]).on('click', (ev) => {
+          $('#photoList img').removeClass('active');
+          photoDisplayed[0].src = $(ev.target)[0].src;
+          $(ev.target).addClass('active');
+        });
+        if (i === 0){
+          photoDisplayed[0].src = res.data[i].data;
+          $('#photoList img').last().addClass('active');
+        }
+      }
+    }, (res) => {
+      $('html, body').animate({scrollTop: message.offset().top}, 'slow');
+      message.transition({animation: 'fade', duration: 1500});
+      displayMsg("Can't load pictures", 'negative', res.error);
     });
   });
 })();

@@ -18,22 +18,31 @@
       <div class="sixteen wide column">
         <div class="ui segment" style='background-color:inherit;'>
           <% if (typeof error === 'undefined'){ %>
-          <div class="ui middle aligned centered grid" style="background-color: black">
-            <div class="two wide column middle aligned">
-              <i class="inverted black circular arrow left link icon large"></i>
-            </div>
-            <div class='twelve wide column middle aligned' id='photoContainer'>
-              <img src='https://vignette2.wikia.nocookie.net/mafiagame/images/2/23/Unknown_Person.png/revision/latest?cb=20151119092211'>
-              <div class="ui inverted dimmer">
-                <div class="content">
-                  <div class="center">
-                    <button class="ui positive basic button" id="submitPhoto">Upload photo</button>
+          <div class="ui inverted segment">
+            <div class="ui middle aligned centered grid">
+              <div class='blurring sixteen wide column middle aligned' id='photoContainer'>
+                <img class='ui large centered rounded image' id='photoDisplayed' src='https://vignette2.wikia.nocookie.net/mafiagame/images/2/23/Unknown_Person.png/revision/latest?cb=20151119092211'>
+                <div class="ui dimmer">
+                  <div class="content">
+                    <div class="center">
+                      <div class="ui vertical buttons">
+                        <div class="ui green inverted large button" id="submitPhoto"><i class="cloud upload icon"></i>Upload picture</div>
+                        <div class="ui hidden divider"></div>
+                        <div class="ui blue inverted large button" id="profilePhoto"><i class="star icon"></i>Set as profile</div>
+                        <div class="ui hidden divider"></div>
+                        <div class="ui red inverted large button" id="deletePhoto"><i class="trash circle icon"></i>Delete picture</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="two wide column middle aligned">
-              <i class="inverted black circular arrow right link icon large"></i>
+            <div class="ui inverted divider"></div>
+            <div class="ui middle aligned centered grid">
+              <div class='sixteen wide column middle aligned'>
+                <div class="ui tiny rounded images" id='photoList'>
+                </div>
+              </div>
             </div>
           </div>
           <% } %>
@@ -146,11 +155,13 @@
                 <div class="ui modal">
                   <div class="header">Upload a picture</div>
                   <div class="content">
-                    <div class="ui info message">
+                    <div class="ui transition info message visible">
+                      <i class="close icon"></i>
                       <div class="header"><i class='circle blue info icon'></i>Information</div>
                       <ul class="list">
                         <li>You can only upload jpeg pictures</li>
-                        <li>You can only have up to 5 pictures per account</li>
+                        <li>You can only have up to five pictures per account</li>
+                        <li>You won't be able to like other persons if you don't have any pictures</li>
                       </ul>
                     </div>
                     <div class="ui transition message" id="uploadMsgBox" style='display:none;'>

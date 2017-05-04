@@ -23,12 +23,12 @@ function request(url, method, data, success = null, error = null){
     },
     timeout: 30000
   })
-  .fail((res, status) => {
+  .fail((res, status, err) => {
     if (typeof error === 'function'){
       if ('error' in res){
         error(res);
       } else {
-        error({error: ["Timeout"]});
+        error({error: [err]});
       }
     }
     return ;

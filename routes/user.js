@@ -171,29 +171,75 @@ router.post('/updateInfo',
     });
   });
 
-  router.post('/uploadPicture',
+router.post('/uploadPicture',
     check.checkConnection.bind([true, false]),
     check.checkParams.bind([
-      ['picture', (elem) => {
-          if (typeof elem !== 'string' || elem.search('data:image/jpeg;base64,') === -1)
-            return false;
+      ['pic', (elem) => {
+        if (typeof elem !== 'string' || elem.search('data:image/jpeg;base64,') === -1)
+          return false;
 
-          const data = elem.split(',')[1];
+        const data = elem.split(',')[1];
 
-          if (!data || data === '')
-            return false;
+        if (!data || data === '')
+          return false;
 
-          try{
-              atob(data);
-          } catch (DOMException e) {
-              console.log(e)
-          }
-          return true;
+        var buffer = Buffer.from(data, 'base64');
+        if (typeof buffer !== 'object'
+            || (buffer[0] !== 255 || buffer[1] !== 216))
+          return false;
+        return true;
       }, "Wrong picture format sent"]
     ]),
     (req, res) => {
+      pool.getConnection(function(error, connection){
+        if (error) return res.json({error: ["Server error"]});
 
-        return res.json({success: ['Picture sucessfully uploaded']});
+        connection.query('select * from PHOTO where id_user = ?;',
+        [req.session.id_user],
+        function (error, results){
+          if (error) {
+            connection.release();
+            return res.json({error: ["Server error"]});
+          }
+          if (results.length >= 5){
+            connection.release();
+            return res.json({error: ["You already have at least five pictures"]});
+          }
+          connection.query('insert into PHOTO (id_user, data) values (?,?)',
+          [req.session.id_user, req.body[0]['pic']],
+          function (error, results){
+            connection.release();
+            if (error) return res.json({error: ['Server error, try later']})
+            return res.json({success: ['Picture sucessfully uploaded']});
+          });
+        });
+      });
   });
+
+router.post('/getPicture',
+    check.checkConnection.bind([true, false, 'hey']),
+    check.checkParams.bind([
+      ['id_user', (elem) => {
+        if ((elem === undefined) || (typeof elem === 'string' && !isNaN(parseInt(elem))))
+          return true;
+        return false;
+      }, "Wrong user"]
+    ]),
+    (req, res) => {
+      pool.getConnection(function(error, connection){
+        if (error) return res.json({error: ["Server error"]});
+
+        const idUser = (req.body[0]['id_user'] !== undefined) ?
+            req.body[0]['id_user'] :
+            req.session.id_user;
+
+        connection.query('select id, data from PHOTO where id_user = ?;', [idUser],
+        function (error, results){
+          connection.release();
+          if (error) return res.json({error: ["Server error"]});
+          return res.json({data: results});
+        });
+      });
+    });
 
 module.exports = router;
