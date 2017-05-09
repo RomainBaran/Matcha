@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%=title%></title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="/SemanticUI/semantic.min.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="/SemanticUI/semantic.min.js"></script>
+  </head>
+</body>
+  <body>
+    <div class="ui primary pointing menu" id="header">
+      <a href="/" class="item active">Home</a>
+      <a href="/search" class="ui item">Search</a>
+      <div class="right menu">
+        <a href="/" class="ui item"><i class="sign out icon"></i></a>
+      </div>
+    </div>
+    <div class="ui middle aligned centered grid">
+      <div class="sixteen wide column">
+        <div class="column" style='background-color:inherit;'>
+          <div class='ui one column grid' style='background-color:inherit;'>
+            <div class="column">
+              <div class="ui segment" style='background-color:inherit;'>
+                <div class="ui transition message main" style='display:none;'>
+                   <i class="close icon"></i>
+                  <div class="header"></div>
+                  <ul class="list"></ul>
+                </div>
+                <div class="ui stackable six link cards" id='list'>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript" src="/js/ajax.js"></script>
+    <script type="text/javascript" src="/js/checkform.js"></script>
+    <script type="text/javascript" src="/js/search.js"></script>
+  </body>
+</html>

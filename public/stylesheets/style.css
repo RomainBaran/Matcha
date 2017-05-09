@@ -26,10 +26,14 @@ body, .bg {
 }
 
 #photoList .active{
-  border: 4px solid #22be34;
+  border: 2px solid #22be34;
 }
 
-#photoList img:not(.active){
+#photoList .profile, #photoList .active.profile{
+  border: 2px solid #3ac0ff;
+}
+
+#photoList img:not(.active):not(.profile){
   -webkit-filter: grayscale(100%);
   filter: grayscale(100%);
 }

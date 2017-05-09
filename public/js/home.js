@@ -195,6 +195,8 @@
     request('/getPicture', 'POST', $({name: 'id_user', value: undefined}), (res) => {
       for (var i = 0; i < res.data.length; i++){
         var photo = $(`<img class='ui image' style='background-color: white;' src='${res.data[i].data}' data-id='${res.data[i].id}'>`);
+        if (res.data[i].id === res.data[i].profilePhoto)
+          photo.addClass('profile');
         photoListBox.append(photo);
         $(photo[0]).on('click', (ev) => {
           $('#photoList img').removeClass('active');
@@ -258,6 +260,8 @@
             $('html, body').animate({scrollTop: message.offset().top}, 'slow');
             message.transition({animation: 'fade', duration: 1500});
             displayMsg('Information', 'positive', res.success);
+            photoListBox.children().removeClass('profile');
+            active.addClass('profile');
         }, (res) => {
             $('html, body').animate({scrollTop: message.offset().top}, 'slow');
             message.transition({animation: 'fade', duration: 1500});

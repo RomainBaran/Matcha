@@ -7,6 +7,7 @@ var app = express();
 var index = require('./routes/index');
 var user = require('./routes/user');
 var photo = require('./routes/photo');
+var search = require('./routes/search');
 
 /*Public access to files in /public*/
 app.use(express.static('public'));
@@ -29,6 +30,7 @@ app.use(session({
 app.use(index);
 app.use(user);
 app.use(photo);
+app.use(search);
 
 //Set error
 app.use(function(err, req, res, next) {

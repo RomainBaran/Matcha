@@ -66,7 +66,7 @@ router.post('/getPicture',
             req.body[0]['id_user'] :
             req.session.id_user;
 
-        connection.query('select id, data from PHOTO where id_user = ?;', [idUser],
+        connection.query('select PHOTO.id, data, profilePhoto from PHOTO, USER where USER.id = PHOTO.id_user and PHOTO.id_user = ?', [idUser],
         function (error, results){
           connection.release();
           if (error) return res.json({error: ["Server error"]});

@@ -171,4 +171,36 @@ router.post('/updateInfo',
     });
   });
 
+router.post('/getUserInfo',
+  check.checkConnection.bind([true, false]),
+  check.checkParams.bind([
+    ['id_user', (elem) => {
+      if ((elem === undefined) || (typeof elem === 'string' && !isNaN(parseInt(elem))))
+        return true;
+      return false;
+    }, "Wrong user"]
+  ]),
+  (req, res) => {
+    pool.getConnection(function(error, connection){
+      if (error) return res.json({error: ["Server error"]});
+
+
+      var sql = `select distinct USER.id, firstname, lastname, birthdate, gender, sexualOrientation, data from USER, PHOTO where USER.id = PHOTO.id_user and USER.profilePhoto = PHOTO.id or USER.profilePhoto IS NULL;`,
+          attributes = [];
+
+      if (req.body[0]['id_user'] !== undefined){
+        sql += ' and USER.id = ?'
+        attributes.push(req.body[0].id_user);
+      }
+      sql += ';';
+      connection.query(sql,
+      attributes,
+      function (error, results){
+        connection.release();
+        if (error) return res.json({error: ["Server error"]});
+        return res.json({data: results});
+      });
+    });
+  });
+
 module.exports = router;
