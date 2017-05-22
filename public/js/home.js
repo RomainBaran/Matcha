@@ -153,8 +153,8 @@
             [inputs[1].name === "last-name", inputs[1].value.length > 0, /^([a-zA-Z]|\ )+$/.test(inputs[1].value)],
             [inputs[2].name === "email", inputs[2].value.length > 0, /^[\w\-\.]+@([\w]+\.){1,2}[a-zA-Z]{2,3}$/.test(inputs[2].value)],
             [inputs[3].name === "date", inputs[3].value.length > 0, /^[0-9]{4}\-(0[1-9]|1[0-2])\-([0-2][0-9]|3[0-1])$/.test(inputs[3].value)],
-            [inputs[4].name === "gender", (parseInt(inputs[4].value) === 1 || parseInt(inputs[4].value) === 2)],
-            [inputs[5].name === "sexualOrientation", (parseInt(inputs[5].value) === 1 || parseInt(inputs[5].value) === 0 || parseInt(inputs[5].value) === 2)],
+            [inputs[4].name === "gender", (inputs[4].value === 'man' || inputs[4].value === 'girl')],
+            [inputs[5].name === "sexualOrientation", (inputs[5].value === 'hetero' || inputs[5].value === 'bi' || inputs[5].value === 'homo')],
             [inputs[6].name === "bio", true],
             [inputs[7].name === "tags", (inputs[7].value === "" || inputs[7].value.split(',').filter((elem) => !(Number.isInteger(parseInt(elem)))).length === 0)],
           ], [

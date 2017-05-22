@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var pool = require('../lib/db');
+var mongoDb = require('../lib/db');
 
 var check = require('../lib/check');
 
@@ -22,8 +22,8 @@ var getYearsOld = (birthdate) => {
 }
 
 router.get(/(^\/$)|(^\/home$)/, check.checkConnection.bind([true, 'signin']), (req, res) => {
-  pool.getConnection(function(error, connection){
-    connection.query('select * from USER where id = ?; select * from TAGS; select id_tag from USER_TAGS where id_user = ?;',
+  mongoDb.MongoClient.connect((error, db) => {
+    /*connection.query('select * from USER where id = ?; select * from TAGS; select id_tag from USER_TAGS where id_user = ?;',
       [req.session.id_user, req.session.id_user],
       function(error, results, fields){
         connection.release();
@@ -39,7 +39,8 @@ router.get(/(^\/$)|(^\/home$)/, check.checkConnection.bind([true, 'signin']), (r
                         .map((elem) => elem['id_tag'])
                         .join();
         return res.render('home', render);
-    });
+    });*/
+    return res.render('home', {title: 'Home'});
   });
 });
 

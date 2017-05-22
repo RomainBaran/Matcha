@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var pool = require('../lib/db');
+var mongoDb = require('../lib/db');
+var fs = require('fs');
 
 var check = require('../lib/check');
 
@@ -24,10 +25,10 @@ router.post('/uploadPicture',
       }, "Wrong picture format sent"]
     ]),
     (req, res) => {
-      pool.getConnection(function(error, connection){
+      mongoDb.MongoClient.connect((error, db) => {
         if (error) return res.json({error: ["Server error"]});
 
-        connection.query('select * from PHOTO where id_user = ?;',
+        /*connection.query('select * from PHOTO where id_user = ?;',
         [req.session.id_user],
         function (error, results){
           if (error) {
@@ -45,7 +46,7 @@ router.post('/uploadPicture',
             if (error) return res.json({error: ['Server error, try later']})
             return res.json({success: ['Picture sucessfully uploaded'], insertId: [results.insertId]});
           });
-        });
+      });*/
       });
   });
 
@@ -59,19 +60,19 @@ router.post('/getPicture',
       }, "Wrong user"]
     ]),
     (req, res) => {
-      pool.getConnection(function(error, connection){
+      mongoDb.MongoClient.connect((error, db) => {
         if (error) return res.json({error: ["Server error"]});
 
         const idUser = (req.body[0]['id_user'] !== undefined) ?
             req.body[0]['id_user'] :
             req.session.id_user;
 
-        connection.query('select PHOTO.id, data, profilePhoto from PHOTO, USER where USER.id = PHOTO.id_user and PHOTO.id_user = ?', [idUser],
+        /*connection.query('select PHOTO.id, data, profilePhoto from PHOTO, USER where USER.id = PHOTO.id_user and PHOTO.id_user = ?', [idUser],
         function (error, results){
           connection.release();
           if (error) return res.json({error: ["Server error"]});
           return res.json({data: results});
-        });
+      });*/
       });
     });
 
@@ -85,10 +86,10 @@ router.post('/deletePicture',
     }, "Wrong picture selected"]
     ]),
     (req, res) => {
-      pool.getConnection(function(error, connection){
+      mongoDb.MongoClient.connect((error, db) => {
         if (error) return res.json({error: ["Server error"]});
 
-        connection.query('select profilePhoto from USER where id = ? and profilePhoto = ?', [req.session.id_user, req.body[0].id_photo],
+        /*connection.query('select profilePhoto from USER where id = ? and profilePhoto = ?', [req.session.id_user, req.body[0].id_photo],
         function(error, results){
             if (error || results.length !== 1) return ;
             connection.query('update USER set profilePhoto = NULL where id = ?', [req.session.id_user]);
@@ -98,7 +99,7 @@ router.post('/deletePicture',
           connection.release();
           if (error) return res.json({error: ["Access Denied"]});
           return res.json({success: ["Picture successfully deleted"]});
-        });
+        });*/
       });
 });
 
@@ -112,10 +113,10 @@ router.post('/setProfilePicture',
     }, "Wrong picture selected"]
     ]),
     (req, res) => {
-      pool.getConnection(function(error, connection){
+      mongoDb.MongoClient.connect((error, db) => {
         if (error) return res.json({error: ["Server error"]});
 
-        connection.query('select id from PHOTO where id_user = ? and id = ?;', [req.session.id_user, req.body[0].id_photo],
+        /*connection.query('select id from PHOTO where id_user = ? and id = ?;', [req.session.id_user, req.body[0].id_photo],
         function (error, results){
           if (error || results.length !== 1){
               connection.release();
@@ -127,7 +128,7 @@ router.post('/setProfilePicture',
                 if (error) return res.json({error: ["Server error"]});
                 return res.json({success: ["Profile picture set"]});
           });
-        });
+      });*/
       });
 });
 
