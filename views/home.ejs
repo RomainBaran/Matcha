@@ -86,21 +86,21 @@
                             <div class="two fields">
                               <div class="field">
                                 <label>First Name</label>
-                                <input type="text" name="first-name" placeholder="First Name" value='<%=firstname%>'>
+                                <input type="text" name="firstname" placeholder="First Name" value='<%=firstname%>'>
                               </div>
                               <div class="field">
                                 <label>Last Name</label>
-                                <input type="text" name="last-name" placeholder="Last Name" value='<%=lastname%>'>
+                                <input type="text" name="lastname" placeholder="Last Name" value='<%=lastname%>'>
                               </div>
                             </div>
                           </div>
                           <div class="field">
                             <label>Email</label>
-                            <input type="text" name="email" placeholder="Email" value='<%=mail%>'>
+                            <input type="text" name="email" placeholder="Email" value='<%=email%>'>
                           </div>
                           <div class="field">
-                            <label>Birthday (<span style='font-style: italic;'><%=yearsOld%> Years old</span>)</label>
-                            <input type="text" name="date" placeholder="YYYY-MM-DD" value='<%=birthdate%>'>
+                            <label>Birthday</label>
+                            <input type="text" name="date" placeholder="YYYY-MM-DD" value='<%=date%>'>
                           </div>
                           <div class="field">
                             <label>Gender</label>
@@ -131,18 +131,20 @@
                         <div class="column">
                           <div class="field">
                             <label>Biography</label>
-                            <textarea name="bio"><%=bio%></textarea>
+                            <textarea name="bio"><%if (typeof bio !== "undefined"){ %><%=bio%><% } %></textarea>
                           </div>
                           <div class="field">
                             <label>Interests</label>
                             <div class="ui multiple selection dropdown">
-                              <input type="hidden" name="tags" value='<%=ownTags%>'>
+                              <input type="hidden" name="tags" value='<%if (typeof tags !== "undefined"){ %><%=tags%><% } %>'>
                               <i class="dropdown icon"></i>
                               <div class="default text"></div>
                               <div class="menu">
-                                <% tags.forEach(function(elem) { %>
-                                    <div class="item" data-value="<%=elem.id%>"><i class="hashtag blue icon"></i><%=elem.name%></div>
-                                <% }); %>
+                                  <div class="item" data-value="yolo"><i class="hashtag blue icon"></i>yolo</div>
+                                  <div class="item" data-value="food"><i class="hashtag blue icon"></i>food</div>
+                                  <div class="item" data-value="42"><i class="hashtag blue icon"></i>42</div>
+                                  <div class="item" data-value="nope"><i class="hashtag blue icon"></i>nope</div>
+                                  <div class="item" data-value="hey"><i class="hashtag blue icon"></i>hey</div>
                               </div>
                             </div>
                           </div>

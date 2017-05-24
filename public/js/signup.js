@@ -38,8 +38,8 @@
       ev.preventDefault();
       var errorInputs = $(".error"),
           errors = checkform(inputs, [
-        [inputs[0].name === "first-name", inputs[0].value.length > 0, /^([a-zA-Z|\ ])+$/.test(inputs[0].value)],
-        [inputs[1].name === "last-name", inputs[1].value.length > 0, /^([a-zA-Z]|\ )+$/.test(inputs[1].value)],
+        [inputs[0].name === "firstname", inputs[0].value.length > 0, /^([a-zA-Z|\ ])+$/.test(inputs[0].value)],
+        [inputs[1].name === "lastname", inputs[1].value.length > 0, /^([a-zA-Z]|\ )+$/.test(inputs[1].value)],
         [inputs[2].name === "email", inputs[2].value.length > 0, /^[\w\-\.]+@([\w]+\.){1,2}[a-zA-Z]{2,3}$/.test(inputs[2].value)],
         [inputs[3].name === "password", inputs[3].value.length > 0, /^(?=(.*[a-zA-Z]){4,})(?=(.*[0-9]){2,})\w+$/.test(inputs[3].value)],
         [inputs[4].name === "date", inputs[4].value.length > 0, /^[0-9]{4}\-(0[1-9]|1[0-2])\-([0-2][0-9]|3[0-1])$/.test(inputs[4].value)],

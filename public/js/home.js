@@ -124,13 +124,20 @@
 
   $(document).ready(function(){
     $('.dropdown').dropdown({ action: 'activate' });
-    $('.ui.multiple.dropdown').dropdown({ allowAdditions: true });
+    $('.ui.multiple.dropdown').dropdown();
     $('.message .close')
       .on('click', function() {
         $(this)
           .closest('.message')
           .transition('fade');
       });
+    $('.ui.form.user').on('keyup keypress', function(e) {
+        var keyCode = e.keyCode || e.which;
+        if (keyCode === 13) {
+          e.preventDefault();
+          return false;
+        }
+     });
 
     uploadInput.on('change', uploadPicture);
 
@@ -149,14 +156,14 @@
       ev.preventDefault();
       var errorInputs = $(".error"),
           errors = checkform(inputs, [
-            [inputs[0].name === "first-name", inputs[0].value.length > 0, /^([a-zA-Z|\ ])+$/.test(inputs[0].value)],
-            [inputs[1].name === "last-name", inputs[1].value.length > 0, /^([a-zA-Z]|\ )+$/.test(inputs[1].value)],
+            [inputs[0].name === "firstname", inputs[0].value.length > 0, /^([a-zA-Z|\ ])+$/.test(inputs[0].value)],
+            [inputs[1].name === "lastname", inputs[1].value.length > 0, /^([a-zA-Z]|\ )+$/.test(inputs[1].value)],
             [inputs[2].name === "email", inputs[2].value.length > 0, /^[\w\-\.]+@([\w]+\.){1,2}[a-zA-Z]{2,3}$/.test(inputs[2].value)],
             [inputs[3].name === "date", inputs[3].value.length > 0, /^[0-9]{4}\-(0[1-9]|1[0-2])\-([0-2][0-9]|3[0-1])$/.test(inputs[3].value)],
             [inputs[4].name === "gender", (inputs[4].value === 'man' || inputs[4].value === 'girl')],
             [inputs[5].name === "sexualOrientation", (inputs[5].value === 'hetero' || inputs[5].value === 'bi' || inputs[5].value === 'homo')],
             [inputs[6].name === "bio", true],
-            [inputs[7].name === "tags", (inputs[7].value === "" || inputs[7].value.split(',').filter((elem) => !(Number.isInteger(parseInt(elem)))).length === 0)],
+            [inputs[7].name === "tags", (inputs[7].value === "" || inputs[7].value.split(',').filter((elem) => !(/^[a-z|A-Z|0-9]*$/.test(elem))).length === 0)],
           ], [
             ["Wrong first-name input name sent", "First name input needs to be filled", "Only letters are accepted in first name input"],
             ["Wrong last-name input name sent", "Last name input needs to be filled", "Only letters are accepted in last name input"],
@@ -165,7 +172,7 @@
             ["Wrong gender input name sent", "Wrong gender selected"],
             ["Wrong sexual orientation input name sent", "Wrong sexual orientation selected"],
             ["Wrong biography input name sent"],
-            ["Wrong tags input name sent", "Wrong tags selected"],
+            ["Wrong tags input name sent", "Tags can only contains letters or numbers"],
           ]);
 
       if (message.hasClass('visible') || message.hasClass('in'))
